@@ -7,8 +7,22 @@ const lessToJS = require('less-vars-to-js');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const path = require('path');
 const fs = require('fs');
+const dotenv = require('dotenv');
 
+// antd theme
 const themeVariables = lessToJS(fs.readFileSync(path.resolve(__dirname, './assets/styles/antd.less'), 'utf8'));
+
+// dotenv
+let mode = process.env.MODE;
+if (!mode) {
+  mode = process.env.NODE_ENV;
+}
+const commonEnv = dotenv.parse(fs.readFileSync(path.resolve(__dirname, `.env`)));
+const specificEnv = dotenv.parse(fs.readFileSync(path.resolve(__dirname, `.env.${mode}`)));
+const env = {
+  ...commonEnv,
+  ...specificEnv,
+};
 
 module.exports = withPlugins(
   [
@@ -43,6 +57,8 @@ module.exports = withPlugins(
     ],
   ],
   {
+    env,
+
     webpack(config, { isServer }) {
       config.resolve.plugins = config.resolve.plugins || [];
 
@@ -53,6 +69,8 @@ module.exports = withPlugins(
         })
       );
 
+      // antd, not really sure why this is needed...
+      // see https://github.com/zeit/next.js/blob/canary/examples/with-ant-design-less/README.md
       if (isServer) {
         const antStyles = /antd\/.*?\/style.*?/;
         const origExternals = [...config.externals];

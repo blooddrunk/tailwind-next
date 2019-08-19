@@ -3,10 +3,17 @@ import '@/assets/styles/tailwind.css';
 import React from 'react';
 import App from 'next/app';
 
+import { LayoutComponentType, DefaultLayout } from '../layouts';
+
 export default class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
+    const Layout = (Component as LayoutComponentType).Layout || DefaultLayout;
 
-    return <Component {...pageProps} />;
+    return (
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    );
   }
 }
