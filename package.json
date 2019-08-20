@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^3.22.0",
+    "axios": "^0.18.1",
+    "lodash": "^4.17.15",
     "next": "^9.0.3",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
+    "@types/lodash": "^4.14.137",
     "@types/node": "^12.7.2",
     "@types/prop-types": "^15.7.1",
     "@types/react": "^16.9.2",
@@ -36,6 +39,7 @@
     "autoprefixer": "^9.6.1",
     "babel-plugin-import": "^1.12.0",
     "babel-plugin-styled-components": "^1.10.6",
+    "consola": "^2.10.1",
     "cross-env": "^5.2.0",
     "cssnano": "^4.1.10",
     "dotenv": "^8.1.0",
