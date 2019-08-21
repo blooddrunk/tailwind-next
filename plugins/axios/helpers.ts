@@ -1,4 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource, AxiosPromise, Canceler } from 'axios';
+import Axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  CancelTokenSource,
+  AxiosPromise,
+  Canceler,
+  AxiosResponse,
+} from 'axios';
 import consola from 'consola';
 
 import { RequestManager } from './RequestManager';
@@ -17,7 +24,7 @@ export const takeLatest = (axiosInstance: AxiosInstance) => {
       source.cancel(`[${config.url}]: Only one request allowed at a time.`);
     }
 
-    source = axios.CancelToken.source();
+    source = Axios.CancelToken.source();
     cancellableCall.cancel = source.cancel;
 
     return axiosInstance({
@@ -31,6 +38,12 @@ export const takeLatest = (axiosInstance: AxiosInstance) => {
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   cancellable?: true | string;
+  __needValidation?: boolean;
+  transformData?: true | ((data: any) => any);
+}
+
+export interface CustomAxiosResponse extends AxiosResponse {
+  config: CustomAxiosRequestConfig;
 }
 
 export interface CustomAxiosInstance extends AxiosInstance {
@@ -57,7 +70,7 @@ export const patchCancellable = (axiosInstance: CustomAxiosInstance, { debug = f
     const requestId = getRequestId(config);
 
     if (requestId) {
-      const source = axios.CancelToken.source();
+      const source = Axios.CancelToken.source();
       config.cancelToken = source.token;
       requestManager.add(requestId, source.cancel);
     }
@@ -83,12 +96,14 @@ export const patchCancellable = (axiosInstance: CustomAxiosInstance, { debug = f
   };
 };
 
-export const setupDebugInterceptor = async (axiosInstance: AxiosInstance) => {
-  axiosInstance.onError(error => {
+export const setupDebugInterceptor = (axiosInstance: AxiosInstance) => {
+  const onError = error => {
     consola.error(error);
-  });
+  };
 
-  axiosInstance.onResponse(res => {
+  axiosInstance.interceptors.request.use(null, onError);
+
+  axiosInstance.interceptors.response.use(res => {
     consola.success(
       `[${res.status}${res.statusText ? res.statusText : ''}]`,
       `[${res.config.method.toUpperCase()}]`,
@@ -102,5 +117,5 @@ export const setupDebugInterceptor = async (axiosInstance: AxiosInstance) => {
     }
 
     return res;
-  });
+  }, onError);
 };
