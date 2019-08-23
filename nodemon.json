@@ -1,0 +1,17 @@
+{
+  "watch": [
+    "server/**",
+    "next.config.js",
+    ".babelrc",
+    "postcss.config.js",
+    "tailwind.config.js",
+    ".env",
+    ".env.development"
+  ],
+  "verbose": true,
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": 4231
+  },
+  "exec": "cross-env NODE_ENV=development node server/index.js"
+}
