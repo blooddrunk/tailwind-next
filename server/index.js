@@ -1,6 +1,7 @@
 /* eslint-disable no-console,@typescript-eslint/no-var-requires */
 const express = require('express');
 const next = require('next');
+const consola = require('consola');
 
 const devProxy = [
   [
@@ -10,6 +11,7 @@ const devProxy = [
       pathRewrite: {
         '^/hn': '',
       },
+      changeOrigin: true,
       logLevel: 'debug',
     },
   ],
@@ -21,12 +23,14 @@ const devProxy = [
       pathRewrite: {
         '^/js': '',
       },
+      changeOrigin: true,
       logLevel: 'debug',
     },
   ],
 ];
 
 const port = parseInt(process.env.PORT, 10) || 3000;
+const host = process.env.HOST || 'localhost';
 const env = process.env.NODE_ENV;
 const dev = env !== 'production';
 const app = next({
@@ -53,14 +57,14 @@ app
     // Default catch-all handler to allow Next.js to handle all other routes
     server.all('*', (req, res) => handle(req, res));
 
-    server.listen(port, err => {
+    server.listen(port, host, err => {
       if (err) {
         throw err;
       }
-      console.log(`> Ready on port ${port} [${env}]`);
+      consola.success(`Ready on port ${port} [${env}]`);
     });
   })
   .catch(err => {
-    console.log('An error occurred, unable to start the server');
-    console.log(err);
+    consola.error('An error occurred, unable to start the server');
+    consola.error(err);
   });

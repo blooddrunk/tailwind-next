@@ -10,3 +10,18 @@ declare module 'styled-components' {
     };
   }
 }
+
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    cancellable?: true | string;
+    __needValidation?: boolean;
+    transformData?: true | ((data: any) => any);
+  }
+
+  export interface AxiosInstance {
+    cancel?: (requestId: string, reason: string) => void;
+    cancelAll?: (reason: string) => void;
+  }
+
+  export interface AxiosResponse<T = any> extends Promise<T> {}
+}

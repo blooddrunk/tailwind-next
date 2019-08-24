@@ -1,6 +1,5 @@
 import isPlainObject from 'lodash/isPlainObject';
-
-import { CustomAxiosInstance, CustomAxiosResponse } from './helpers';
+import { AxiosInstance } from 'axios';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -28,7 +27,7 @@ const validateStatus = ({ status }) => {
   return `服务异常: ${status}`;
 };
 
-export default (axiosInstance: CustomAxiosInstance) => {
+export default (axiosInstance: AxiosInstance) => {
   const onError = error => {
     let handled: boolean | string = false;
     if (error.response) {
@@ -57,8 +56,9 @@ export default (axiosInstance: CustomAxiosInstance) => {
       method: 'get',
     };
 
-    // FIXME: this will cause bug if url starts with http:// or https://
-    config.url = config.url.replace(/[/]{2,}/g, '/');
+    if (!/^https?:/.test(config.url)) {
+      config.url = config.url.replace(/[/]{2,}/g, '/');
+    }
 
     if (isDev) {
       const mockApiPrefx = process.env.MOCK_API_PREFIX;
@@ -72,7 +72,7 @@ export default (axiosInstance: CustomAxiosInstance) => {
     return config;
   }, onError);
 
-  axiosInstance.interceptors.response.use((response: CustomAxiosResponse) => {
+  axiosInstance.interceptors.response.use(response => {
     const {
       config: { __needValidation = true, transformData = true },
     } = response;

@@ -1,11 +1,4 @@
-import Axios, {
-  AxiosInstance,
-  AxiosRequestConfig,
-  CancelTokenSource,
-  AxiosPromise,
-  Canceler,
-  AxiosResponse,
-} from 'axios';
+import Axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource, AxiosPromise, Canceler } from 'axios';
 import consola from 'consola';
 
 import { RequestManager } from './RequestManager';
@@ -36,25 +29,10 @@ export const takeLatest = (axiosInstance: AxiosInstance) => {
   return cancellableCall;
 };
 
-export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
-  cancellable?: true | string;
-  __needValidation?: boolean;
-  transformData?: true | ((data: any) => any);
-}
-
-export interface CustomAxiosResponse extends AxiosResponse {
-  config: CustomAxiosRequestConfig;
-}
-
-export interface CustomAxiosInstance extends AxiosInstance {
-  cancel?: (requestId: string, reason: string) => void;
-  cancelAll?: (reason: string) => void;
-}
-
-export const patchCancellable = (axiosInstance: CustomAxiosInstance, { debug = false, logger = console.log } = {}) => {
+export const patchCancellable = (axiosInstance: AxiosInstance, { debug = false, logger = console.log } = {}) => {
   const requestManager = new RequestManager({ debug, logger });
 
-  const getRequestId = ({ cancellable, method, url }: CustomAxiosRequestConfig) => {
+  const getRequestId = ({ cancellable, method, url }: AxiosRequestConfig) => {
     let requestId;
     if (cancellable === true) {
       // auto-set requestId
@@ -66,7 +44,7 @@ export const patchCancellable = (axiosInstance: CustomAxiosInstance, { debug = f
     return requestId;
   };
 
-  axiosInstance.interceptors.request.use((config: CustomAxiosRequestConfig) => {
+  axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
     const requestId = getRequestId(config);
 
     if (requestId) {
