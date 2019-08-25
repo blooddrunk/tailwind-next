@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useAsyncFn } from 'react-use';
 
+import { useAxios } from '@/context';
 import { SimpleList, SimpleListItem } from '@/components/SimpleList';
-import axios from '@/plugins/axios';
 
 export default () => {
+  const axios = useAxios();
+
   const [state, fetchData] = useAsyncFn<SimpleListItem[]>(async () => {
     const { data } = await axios.get('https://hn.algolia.com/api/v1/search', {
       params: {
