@@ -1,7 +1,7 @@
 import Axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource, AxiosPromise, Canceler } from 'axios';
 import consola from 'consola';
 
-import { RequestManager } from './RequestManager';
+import { RequestManager, RequestManagerOptions } from './RequestManager';
 
 type CancellableFnType = {
   (config: any): AxiosPromise;
@@ -29,14 +29,19 @@ export const takeLatest = (axiosInstance: AxiosInstance) => {
   return cancellableCall;
 };
 
-export const patchCancellable = (axiosInstance: AxiosInstance, { debug = false, logger = console.log } = {}) => {
-  const requestManager = new RequestManager({ debug, logger });
+export const getDefaultRequestId = ({ method = 'GET', url }: { method?: string; url?: string }) => {
+  // return `${method}_${url.slice(url.lastIndexOf('/'))}_${nanoid()}`;
+  return `${method}_${url}`;
+};
+
+export const patchAxios = (axiosInstance: AxiosInstance, requestManagerOptions: RequestManagerOptions) => {
+  const requestManager = new RequestManager(requestManagerOptions);
 
   const getRequestId = ({ cancellable, method, url }: AxiosRequestConfig) => {
     let requestId;
     if (cancellable === true) {
       // auto-set requestId
-      requestId = `${method}_${url}`;
+      requestId = getDefaultRequestId({ method, url });
     } else if (typeof cancellable === 'string') {
       requestId = cancellable;
     }
@@ -77,6 +82,7 @@ export const patchCancellable = (axiosInstance: AxiosInstance, { debug = false, 
 export const setupDebugInterceptor = (axiosInstance: AxiosInstance) => {
   const onError = error => {
     consola.error(error);
+    return Promise.reject(error);
   };
 
   axiosInstance.interceptors.request.use(null, onError);

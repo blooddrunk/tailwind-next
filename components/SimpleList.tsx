@@ -7,11 +7,16 @@ export type SimpleListItem = {
 export type SimpleListProps = {
   items?: SimpleListItem[];
   loading?: boolean;
+  error?: Error | null;
 };
 
-export const SimpleList = ({ items = [], loading = false }: SimpleListProps) => {
+export const SimpleList = ({ items = [], loading = false, error }: SimpleListProps) => {
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Something went wrong...</div>;
   }
 
   return (

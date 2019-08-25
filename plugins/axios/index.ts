@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import consola from 'consola';
 
-import { patchCancellable, setupDebugInterceptor } from './helpers';
+import { patchAxios, setupDebugInterceptor } from './helpers';
 import customizeAxios from './customize';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -18,16 +18,17 @@ const axios = Axios.create({
   headers,
 });
 
-if (isDev) {
-  setupDebugInterceptor(axios);
-}
-
-patchCancellable(axios, {
+patchAxios(axios, {
   debug: isDev,
   logger: consola.info,
 });
+
+if (isDev) {
+  setupDebugInterceptor(axios);
+}
 
 customizeAxios(axios);
 
 export default axios;
 export * from './helpers';
+export * from './RequestManager';

@@ -1,6 +1,6 @@
 import { Canceler } from 'axios';
 
-export type RequestManagerOptionsType = {
+export type RequestManagerOptions = {
   debug?: Boolean;
   logger?: (...args: any[]) => any;
 };
@@ -8,7 +8,9 @@ export type RequestManagerOptionsType = {
 export class RequestManager {
   requests: Map<string, Canceler>;
 
-  constructor(public options: RequestManagerOptionsType) {
+  constructor(
+    public options: RequestManagerOptions = { debug: process.env.NODE_ENV === 'development', logger: console.log }
+  ) {
     this.requests = new Map();
   }
 
@@ -27,7 +29,7 @@ export class RequestManager {
     this.requests.delete(requestId);
   }
 
-  cancel(requestId: string, reason: string) {
+  cancel(requestId: string, reason: string = `Request '${requestId}' cancelled`) {
     if (this.requests.has(requestId)) {
       this.requests.get(requestId)(reason);
       this.remove(requestId);
