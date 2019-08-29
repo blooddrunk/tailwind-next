@@ -19,7 +19,7 @@ export function createCtx<StateType, ActionType>(
   const defaultDispatch: React.Dispatch<ActionType> = () => initialState; // we never actually use this
   const ctx = React.createContext({
     state: initialState,
-    dispatch: defaultDispatch, // just to mock out the dispatch type and make it not optioanl
+    dispatch: defaultDispatch, // just to mock out the dispatch type and make it not optional
   });
   function Provider(props: React.PropsWithChildren<{}>) {
     const [state, dispatch] = React.useReducer<React.Reducer<StateType, ActionType>>(reducer, initialState);
