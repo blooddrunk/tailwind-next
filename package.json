@@ -19,20 +19,20 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "antd": "^3.22.0",
+    "antd": "^3.22.2",
     "axios": "^0.18.1",
     "formik": "^1.5.8",
     "lodash": "^4.17.15",
     "nanoid": "^2.0.4",
-    "next": "^9.0.4",
+    "next": "^9.0.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-use": "^11.0.2",
+    "react-use": "^11.3.2",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^1.2.0",
-    "@types/lodash": "^4.14.137",
+    "@types/lodash": "^4.14.138",
     "@types/nanoid": "^2.0.0",
     "@types/node": "^12.7.2",
     "@types/react": "^16.9.2",
@@ -43,7 +43,7 @@
     "@zeit/next-bundle-analyzer": "^0.1.2",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-less": "^1.0.1",
-    "babel-plugin-import": "^1.12.0",
+    "babel-plugin-import": "^1.12.1",
     "babel-plugin-styled-components": "^1.10.6",
     "consola": "^2.10.1",
     "cross-env": "^5.2.0",
@@ -67,7 +67,7 @@
     "signale": "^1.4.0",
     "tailwindcss": "^1.1.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "browserslist": {
     "production": [

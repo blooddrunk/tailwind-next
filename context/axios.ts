@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 
-import { createCtx } from './helpers';
+import { createSimpleCtx } from './helpers';
 
-const [useAxios, AxiosProvider] = createCtx<AxiosInstance>();
+const [useAxios, Provider] = createSimpleCtx<AxiosInstance>();
 
-export { useAxios, AxiosProvider };
+export { useAxios, Provider };

@@ -2,7 +2,7 @@ import React from 'react';
 
 // create context with no upfront defaultValue
 // without having to do undefined check all the time
-export function createCtx<A>() {
+export function createSimpleCtx<A>() {
   const ctx = React.createContext<A | undefined>(undefined);
   function useCtx() {
     const c = React.useContext(ctx);
@@ -12,13 +12,17 @@ export function createCtx<A>() {
   return [useCtx, ctx.Provider] as const;
 }
 
-type ReducerType<State> = (state: State, action: State) => State;
-export function createCtxWithReducer<A>(defaultValue: A, reducer: ReducerType<A>) {
-  type DispatchType = React.Dispatch<typeof defaultValue>;
-  const defaultDispatch: DispatchType = () => defaultValue;
-  const ctx = React.createContext({ state: defaultValue, dispatch: defaultDispatch });
+export function createCtx<StateType, ActionType>(
+  reducer: React.Reducer<StateType, ActionType>,
+  initialState: StateType
+) {
+  const defaultDispatch: React.Dispatch<ActionType> = () => initialState; // we never actually use this
+  const ctx = React.createContext({
+    state: initialState,
+    dispatch: defaultDispatch, // just to mock out the dispatch type and make it not optioanl
+  });
   function Provider(props: React.PropsWithChildren<{}>) {
-    const [state, dispatch] = React.useReducer(reducer, defaultValue);
+    const [state, dispatch] = React.useReducer<React.Reducer<StateType, ActionType>>(reducer, initialState);
     return <ctx.Provider value={{ state, dispatch }} {...props} />;
   }
   return [ctx, Provider] as const;

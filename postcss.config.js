@@ -26,9 +26,9 @@ module.exports = {
   plugins: [
     require('postcss-easy-import'),
     require('tailwindcss'),
-    require('postcss-preset-env'){
+    require('postcss-preset-env')({
       stage: 2,
-    },
+    }),
     require('cssnano')({
       preset: 'default',
     }),

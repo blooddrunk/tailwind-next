@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { AxiosProvider } from './axios';
+import { Provider as AxiosProvider } from './axios';
 import axios from '@/plugins/axios';
 
 export default ({ children }: { children: ReactNode }) => {
