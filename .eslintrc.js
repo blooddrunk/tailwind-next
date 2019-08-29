@@ -1,6 +1,8 @@
 module.exports = {
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
 
+  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier'],
+
   extends: [
     'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'plugin:react/recommended', // uses react-specific linting rules
@@ -17,7 +19,8 @@ module.exports = {
     // },
   },
 
-  plugins: ['react', '@typescript-eslint', 'prettier'],
-
-  rules: {},
+  rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+  },
 };
