@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import useAsync from '@/hooks/useAsync';
+import useAsyncData from '@/hooks/useAsyncData';
 import { SimpleList, SimpleListItem } from '@/components/SimpleList';
 
 export default () => {
   const [query, setQuery] = useState('react');
 
-  const [state, fetchData] = useAsync<SimpleListItem[]>(
+  const [state, fetchData] = useAsyncData<SimpleListItem[]>(
     {
       url: 'https://hn.algolia.com/api/v1/search',
       params: {
