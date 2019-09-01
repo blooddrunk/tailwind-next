@@ -34,7 +34,7 @@ export const getDefaultRequestId = ({ method = 'GET', url }: { method?: string; 
   return `${method}_${url}`;
 };
 
-export const patchAxios = (axiosInstance: AxiosInstance, requestManagerOptions: RequestManagerOptions) => {
+export const patchCancellable = (axiosInstance: AxiosInstance, requestManagerOptions: RequestManagerOptions) => {
   const requestManager = new RequestManager(requestManagerOptions);
 
   const getRequestId = ({ cancellable, method, url }: AxiosRequestConfig) => {

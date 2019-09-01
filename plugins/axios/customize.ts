@@ -11,13 +11,13 @@ const validateResponse = response => {
     return response;
   }
 
-  const { errcode = 0, errmsg = '未知错误', ...rest } = response;
-  switch (`${errcode}`) {
+  const { code = 0, message = '未知错误', ...rest } = response;
+  switch (`${code}`) {
     case '0':
       return rest;
 
     default: {
-      throw new Error(errmsg);
+      throw new Error(message);
     }
   }
 };
@@ -56,9 +56,11 @@ export default (axiosInstance: AxiosInstance) => {
       method: 'get',
     };
 
-    if (!/^https?:/.test(config.url)) {
-      config.url = config.url.replace(/[/]{2,}/g, '/');
+    if (!config.url) {
+      throw new Error('URL is missing in request!');
     }
+
+    config.url = config.url.replace(/(?<=[^:\s])[\/]{2,}/, '/');
 
     if (isDev) {
       const mockApiPrefx = process.env.MOCK_API_PREFIX;

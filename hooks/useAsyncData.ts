@@ -1,10 +1,10 @@
-import { DependencyList, useCallback, useState, useRef } from 'react';
+import { DependencyList, useCallback, useState } from 'react';
 import Axios, { AxiosRequestConfig } from 'axios';
 import { useMountedState } from 'react-use';
-import nanoid from 'nanoid';
 
 import { getDefaultRequestId } from '@/plugins/axios';
 import { useAxios } from '@/context/axios';
+import { useId } from './useId';
 
 export type AsyncState<T> =
   | {
@@ -23,12 +23,12 @@ export type AsyncState<T> =
       value: T;
     };
 
-export default <Result extends any = any>(
+export const useAsyncData = <Result extends any = any>(
   config: AxiosRequestConfig,
   deps: DependencyList = [],
   initialState: AsyncState<Result> = { loading: false }
 ) => {
-  const scope = useRef<string>(nanoid());
+  const id = useId();
   const [state, set] = useState<AsyncState<Result>>(initialState);
   const axios = useAxios();
   const isMounted = useMountedState();
@@ -36,7 +36,7 @@ export default <Result extends any = any>(
   const callback = useCallback(async () => {
     set({ loading: true });
     config = {
-      cancellable: `${getDefaultRequestId(config)}_${scope.current}`,
+      cancellable: `${getDefaultRequestId(config)}_${id}`,
       ...config,
     };
 
