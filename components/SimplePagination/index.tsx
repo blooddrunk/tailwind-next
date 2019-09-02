@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
 
 import { Pagination } from '@/hooks/useList';
 
@@ -8,11 +7,12 @@ import './simple-pagination.scss';
 export type SimplePaginationProps = {
   page: number;
   rowsPerPage: number;
+  total: number;
   onUpdate: (payload: Pagination) => void;
 };
 
-export const SimplePagination = ({ page, rowsPerPage, onUpdate }: SimplePaginationProps) => {
-  const pagesCount = Math.ceil(page / rowsPerPage);
+export const SimplePagination = ({ page, rowsPerPage, total, onUpdate }: SimplePaginationProps) => {
+  const pagesCount = Math.ceil(total / rowsPerPage);
 
   return (
     <nav>
@@ -35,7 +35,7 @@ export const SimplePagination = ({ page, rowsPerPage, onUpdate }: SimplePaginati
           <button
             className="SimplePagination__button"
             disabled={page >= pagesCount}
-            onClick={() => {
+            onClick={e => {
               onUpdate({
                 page: page + 1,
               });

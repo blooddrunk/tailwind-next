@@ -4,8 +4,10 @@ import { useAsyncData } from '@/hooks/useAsyncData';
 import { SimpleList, SimpleListItem } from '@/components/SimpleList';
 import { SearchForm } from '@/components/SearchForm';
 
+const defaultQuery = 'react';
+
 export default () => {
-  const [query, setQuery] = useState('react');
+  const [query, setQuery] = useState(defaultQuery);
 
   const [state, fetchData] = useAsyncData<SimpleListItem[]>(
     {
@@ -25,7 +27,7 @@ export default () => {
 
   return (
     <section>
-      <SearchForm query={query} setQuery={setQuery} onSearch={fetchData}></SearchForm>
+      <SearchForm defaultQuery={query} setQuery={setQuery}></SearchForm>
 
       <SimpleList items={state.value} loading={state.loading} error={state.error}></SimpleList>
     </section>

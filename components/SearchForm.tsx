@@ -1,16 +1,20 @@
-export const SearchForm = ({ query, setQuery, onSearch }) => {
+import { useState } from 'react';
+
+export const SearchForm = ({ defaultQuery, setQuery }) => {
+  const [search, setSearch] = useState(defaultQuery);
+
   return (
     <form
       className="tw-py-3"
       onSubmit={event => {
         event.preventDefault();
-        onSearch();
+        setQuery(search);
       }}
     >
       <input
         className="tw-shadow tw-appearance-none tw-border tw-rounded tw-w-64 tw-py-2 tw-px-3 tw-text-gray-700 tw-leading-tight focus:tw-outline-none focus:tw-shadow-outline"
-        value={query}
-        onChange={event => setQuery(event.target.value)}
+        value={search}
+        onChange={event => setSearch(event.target.value)}
         type="text"
         placeholder="Query"
       />

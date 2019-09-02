@@ -1,31 +1,22 @@
 import merge from 'lodash/merge';
 import { AxiosRequestConfig } from 'axios';
 
-import { Pagination, Filter, Payload } from '.';
+import { Pagination } from '.';
 
-export const normalizeRequest = (
-  config: AxiosRequestConfig,
-  {
-    filter,
-    pagination,
-    parseFilter,
-  }: { filter?: Filter; pagination?: Pagination; parseFilter?: (payload: Payload) => Payload }
-) => {
+export const defaultPayloadTransformer = payload => payload;
+
+export const normalizeRequest = (config: AxiosRequestConfig, { pagination }: { pagination?: Pagination }) => {
   config.method = config.method || 'get';
 
-  let payload: Payload = {
-    ...pagination,
-    ...filter,
-  };
-  if (typeof parseFilter === 'function') {
-    payload = parseFilter(payload);
+  let payloadWrapper: { params?: Pagination } | { data?: Pagination };
+  if (config.method.toLowerCase() === 'get') {
+    payloadWrapper = { params: pagination };
+  } else {
+    payloadWrapper = { data: pagination };
   }
 
-  let payloadWrapper: { params?: Payload; data?: Payload };
-  if (config.method.toLowerCase() === 'get') {
-    payloadWrapper = { params: payload };
-  } else {
-    payloadWrapper = { data: payload };
+  if (!config.transformPayload) {
+    config.transformPayload = defaultPayloadTransformer;
   }
 
   config = merge(payloadWrapper, config);

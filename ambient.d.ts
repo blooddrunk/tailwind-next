@@ -16,6 +16,7 @@ declare module 'axios' {
     cancellable?: true | string;
     __needValidation?: boolean;
     transformData?: true | ((data: any) => any);
+    transformPayload?: ({ data, params }: { data?: any; params?: any }) => { data?: any; params?: any };
   }
 
   export interface AxiosInstance {

@@ -51,6 +51,15 @@ export default (axiosInstance: AxiosInstance) => {
   };
 
   axiosInstance.interceptors.request.use(config => {
+    const { transformPayload } = config;
+
+    if (typeof transformPayload === 'function') {
+      config = {
+        ...config,
+        ...transformPayload(config),
+      };
+    }
+
     config = {
       ...config,
       method: 'get',

@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import { useList, Payload } from '@/hooks/useList';
+import { useList } from '@/hooks/useList';
 import { SimpleList, SimpleListItem } from '@/components/SimpleList';
 import { SearchForm } from '@/components/SearchForm';
 import { SimplePagination } from '@/components/SimplePagination';
 
+const defaultQuery = 'react';
+
 export default () => {
-  const [query, setQuery] = useState('react');
+  const [query, setQuery] = useState(defaultQuery);
 
   const [state, fetchData, dispatch] = useList<SimpleListItem[]>(
     {
@@ -14,16 +16,21 @@ export default () => {
       params: {
         query,
       },
-      transformData: ({ hits }) => hits,
-      parseFilter: ({ rowsPerPage, ...rest }) => {
-        const payload: Payload = {
-          hitsPerPage: rowsPerPage,
-          ...rest,
+      transformData: ({ hits, nbHits }) => ({
+        items: hits,
+        total: nbHits,
+      }),
+      transformPayload: ({ params }) => {
+        const newParams = {
+          ...params,
+          hitsPerPage: params.rowsPerPage,
         };
 
-        delete payload.rowsPerPage;
+        delete newParams.rowsPerPage;
 
-        return payload;
+        return {
+          params: newParams,
+        };
       },
     },
     [query]
@@ -37,13 +44,14 @@ export default () => {
 
   return (
     <section>
-      <SearchForm query={query} setQuery={setQuery} onSearch={fetchData}></SearchForm>
+      <SearchForm defaultQuery={defaultQuery} setQuery={setQuery}></SearchForm>
 
       <SimpleList items={state.items} loading={state.loading} error={state.error}></SimpleList>
 
       <SimplePagination
         page={pagination.page}
         rowsPerPage={pagination.rowsPerPage}
+        total={state.total}
         onUpdate={payload => {
           dispatch({ type: 'updatePagination', payload });
         }}
