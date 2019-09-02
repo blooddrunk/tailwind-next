@@ -10,7 +10,7 @@ export type SimpleListProps = {
   error?: Error | null;
 };
 
-export const SimpleList = ({ items = [], loading = false, error }: SimpleListProps) => {
+export const SimpleList = ({ items, loading = false, error }: SimpleListProps) => {
   if (loading) {
     return <div>Loading...</div>;
   }

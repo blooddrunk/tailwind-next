@@ -4,6 +4,7 @@ export const SearchForm = ({ query, setQuery, onSearch }) => {
       className="tw-py-3"
       onSubmit={event => {
         event.preventDefault();
+        onSearch();
       }}
     >
       <input
@@ -16,7 +17,7 @@ export const SearchForm = ({ query, setQuery, onSearch }) => {
 
       <button
         className="tw-ml-3 tw-bg-blue-500 hover:tw-bg-blue-700 tw-text-white tw-font-bold tw-py-2 tw-px-4 tw-rounded"
-        onClick={onSearch}
+        type="submit"
       >
         Search
       </button>

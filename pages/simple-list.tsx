@@ -15,7 +15,8 @@ export default () => {
       },
       transformData: ({ hits }) => hits,
     },
-    [query]
+    [query],
+    []
   );
 
   useEffect(() => {

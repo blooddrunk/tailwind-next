@@ -1,0 +1,9 @@
+.SimplePagination {
+  &__button {
+    @apply tw-flex-grow;
+
+    &:disabled {
+      @apply tw-text-gray-500 tw-cursor-not-allowed;
+    }
+  }
+}

@@ -6,6 +6,10 @@ const menuList = [
     title: 'Simple List',
     href: '/simple-list',
   },
+  {
+    title: 'List with pagination',
+    href: '/list',
+  },
 ];
 
 const Home = () => {

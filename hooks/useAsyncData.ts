@@ -6,35 +6,31 @@ import { getDefaultRequestId } from '@/plugins/axios';
 import { useAxios } from '@/context/axios';
 import { useId } from './useId';
 
-export type AsyncState<T> =
-  | {
-      loading: boolean;
-      error?: undefined;
-      value?: undefined;
-    }
-  | {
-      loading: false;
-      error: Error;
-      value?: undefined;
-    }
-  | {
-      loading: false;
-      error?: undefined;
-      value: T;
-    };
+export type AsyncState<T> = {
+  loading: boolean;
+  error?: undefined;
+  value?: T;
+};
 
 export const useAsyncData = <Result extends any = any>(
   config: AxiosRequestConfig,
   deps: DependencyList = [],
-  initialState: AsyncState<Result> = { loading: false }
+  initialValue?: Result
 ) => {
   const id = useId();
-  const [state, set] = useState<AsyncState<Result>>(initialState);
+  const [state, set] = useState<AsyncState<Result>>({
+    loading: false,
+    value: initialValue,
+  });
   const axios = useAxios();
   const isMounted = useMountedState();
 
   const callback = useCallback(async () => {
-    set({ loading: true });
+    set(prev => ({
+      ...prev,
+      loading: true,
+    }));
+
     config = {
       cancellable: `${getDefaultRequestId(config)}_${id}`,
       ...config,
@@ -58,5 +54,9 @@ export const useAsyncData = <Result extends any = any>(
     }
   }, deps);
 
-  return [state, callback] as const;
+  const clear = useCallback(() => {
+    set({ loading: false, value: initialValue });
+  }, [initialValue]);
+
+  return [state, callback, clear] as const;
 };

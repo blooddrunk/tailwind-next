@@ -2,6 +2,7 @@
 const withPlugins = require('next-compose-plugins');
 const withCSS = require('@zeit/next-css');
 const withLess = require('@zeit/next-less');
+const withSass = require('@zeit/next-sass');
 const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
 const lessToJS = require('less-vars-to-js');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -37,6 +38,8 @@ module.exports = withPlugins(
         },
       },
     ],
+
+    withSass,
 
     [
       withBundleAnalyzer,
