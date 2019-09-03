@@ -23,7 +23,7 @@ export const SimpleList = ({ items, loading = false, error }: SimpleListProps) =
     <ul>
       {items.map(item => {
         return (
-          <li key={item.objectID}>
+          <li className="tw-py-2" key={item.objectID}>
             <a className="hover:tw-underline" href={item.url} target="_blank">
               {item.title}
             </a>

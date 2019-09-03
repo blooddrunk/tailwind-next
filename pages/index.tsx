@@ -10,6 +10,10 @@ const menuList = [
     title: 'List with pagination',
     href: '/list',
   },
+  {
+    title: 'List using Ant Design',
+    href: '/list-antd',
+  },
 ];
 
 const Home = () => {

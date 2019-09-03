@@ -1,11 +1,26 @@
 import { useState, useEffect } from 'react';
+import { Table } from 'antd';
+import { ColumnProps } from 'antd/es/table';
 
 import { useList } from '@/hooks/useList';
-import { SimpleList, SimpleListItem } from '@/components/SimpleList';
-import { SearchForm } from '@/components/SearchForm';
-import { SimplePagination } from '@/components/SimplePagination';
+import { SimpleListItem } from '@/components/SimpleList';
+import { SearchFormAntd } from '@/components/SearchFormAntd';
 
 const defaultQuery = 'react';
+
+const columns: ColumnProps<SimpleListItem>[] = [
+  {
+    title: 'Name',
+    dataIndex: 'title',
+    render: (text, record) => (
+      <span>
+        <a className="hover:tw-underline" href={record.url} target="_blank">
+          {text}
+        </a>
+      </span>
+    ),
+  },
+];
 
 export default () => {
   const [query, setQuery] = useState(defaultQuery);
@@ -44,7 +59,7 @@ export default () => {
 
   return (
     <section>
-      <SearchForm
+      <SearchFormAntd
         defaultQuery={defaultQuery}
         onSearch={search => {
           dispatch({
@@ -52,18 +67,28 @@ export default () => {
           });
           setQuery(search);
         }}
-      ></SearchForm>
+      ></SearchFormAntd>
 
-      <SimpleList items={state.items} loading={state.loading} error={state.error}></SimpleList>
-
-      <SimplePagination
-        page={pagination.page}
-        rowsPerPage={pagination.rowsPerPage}
-        total={state.total}
-        onUpdate={payload => {
-          dispatch({ type: 'updatePagination', payload });
+      <Table
+        rowKey="objectID"
+        showHeader={false}
+        columns={columns}
+        dataSource={state.items}
+        loading={state.loading}
+        pagination={{
+          total: state.total,
+          current: pagination.page,
+          pageSize: pagination.rowsPerPage,
+          onChange: page => {
+            dispatch({
+              type: 'updatePagination',
+              payload: {
+                page,
+              },
+            });
+          },
         }}
-      ></SimplePagination>
+      ></Table>
     </section>
   );
 };

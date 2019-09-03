@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-export const SearchForm = ({ defaultQuery, setQuery }) => {
+export type SearchFormProps = {
+  defaultQuery: string;
+  onSearch: (search: string) => void;
+};
+
+export const SearchForm = ({ defaultQuery, onSearch }: SearchFormProps) => {
   const [search, setSearch] = useState(defaultQuery);
 
   return (
@@ -8,7 +13,7 @@ export const SearchForm = ({ defaultQuery, setQuery }) => {
       className="tw-py-3"
       onSubmit={event => {
         event.preventDefault();
-        setQuery(search);
+        onSearch(search);
       }}
     >
       <input
@@ -16,7 +21,7 @@ export const SearchForm = ({ defaultQuery, setQuery }) => {
         value={search}
         onChange={event => setSearch(event.target.value)}
         type="text"
-        placeholder="Query"
+        placeholder="Search"
       />
 
       <button

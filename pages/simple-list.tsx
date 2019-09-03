@@ -27,7 +27,7 @@ export default () => {
 
   return (
     <section>
-      <SearchForm defaultQuery={query} setQuery={setQuery}></SearchForm>
+      <SearchForm defaultQuery={query} onSearch={setQuery}></SearchForm>
 
       <SimpleList items={state.value} loading={state.loading} error={state.error}></SimpleList>
     </section>
